@@ -17,7 +17,7 @@ end
 
 
 post '/notify' do
-  PingdomApi.new.notify(params[:payload])
+  PingdomApi.new.notify(params)
 end
 
 get '/' do

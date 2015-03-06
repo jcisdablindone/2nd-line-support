@@ -40,8 +40,8 @@ class PingdomApi
 	end
 
 
-	def notify(payload)
-		payload = JSON.parse(payload)
+	def notify(params)
+		payload = JSON.parse(params['event'])
 		key = "#{payload['client']['name']}/#{payload['check']['name']}"
 		record_alert(key, payload)
 	end
