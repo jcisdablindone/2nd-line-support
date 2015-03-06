@@ -5,6 +5,7 @@ require 'timecop'
 require 'rspec'
 require_relative '../../models/pingdom_api'
 require_relative '../fixtures/checks_fixtures'
+require_relative '../fixtures/sensu_events'
 require 'spec_helper'
 require 'timeout'
 
@@ -153,44 +154,19 @@ describe PingdomApi do
 			end
 		end
 
-		describe '#notify' do
-			it 'should store a sensu notification and be able to reconstruct it from the db' do
-				payload = sensu_data.to_json
-				api.notify(payload)
-				key = "host01/frontend_http_check"
-				alert = Alert.fetch(key)
-				expect(alert.value_hash['message']).to eq(sensu_data)
-			end
-		end
+		# describe '#notify' do     ##### moved to sensu_event_processor_spec.rb
+		# 	it 'should store a sensu notification and be able to reconstruct it from the db' do
+		# 		api.notify(sensu_up_event)
+		# 		key = "host01/frontend_http_check"
+		# 		alert = Alert.fetch(key)
+		# 		puts ">>>>>>>>>>>>>>>> DEBUG ALERTT    #{__FILE__}::#{__LINE__} <<<<<<<<<<"
+		# 		pp alert
+		# 		expect(alert).to eq(sensu_up_event)
+		# 	end
+		# end
 	end
 end
 
-
-def sensu_data
-	{
-		"client" => {
-			"name" => "host01",
-   		"address" => "10.2.1.11",
-   		"subscriptions" => ["all", "frontend", "proxy"],
-   		"timestamp" => 1326390159
-   	},
- 		"check" => {
- 			"name"=>"frontend_http_check",
-   		"issued" => 1326390169,
-   		"output" => "HTTP CRITICAL: HTTP/1.1 503 Service Temporarily Unavailable",
-			"status" => 2,
-			"command" => "check_http -I 127.0.0.1 -u http://web.example.com/healthcheck.html -R 'pageok'",
-			"subscribers" =>["frontend"],
-			"interval" => 60,
-			"handler" => "campfire",
-			"history" => ["0", "2"],
-			"flapping" => false
-		},
- 		"occurrences" => 1,
- 		"action" => "create"
- 	}
-
-end
 
 
 def expected_results_from_all_alerts

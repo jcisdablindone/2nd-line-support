@@ -17,6 +17,10 @@ class Alert < Struct.new(:key, :value)
     redis.del(key)
   end
 
+  def self.exist?(key)
+    !redis.get(key).nil?
+  end
+
   def self.destroy_all(keys)
     keys = redis.keys(keys)
     redis.del(keys) unless keys.empty?
@@ -32,7 +36,7 @@ class Alert < Struct.new(:key, :value)
     if data.is_a?(Hash)
       data.to_json
     else
-      data
+      raise "Can only store hashes in the database"
     end
   end
 

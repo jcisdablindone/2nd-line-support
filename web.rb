@@ -2,8 +2,11 @@ require 'rubygems'
 require 'sinatra'
 require_relative 'models/alert.rb'
 require_relative 'models/pingdom_api.rb'
+require_relative 'models/sensu_event_processor.rb'
 require_relative 'models/traffic_spike.rb'
 require_relative 'lib/real_time_analytics.rb'
+
+
 
 
 get '/appsdown.json' do
@@ -18,7 +21,8 @@ end
 
 
 post '/notify' do
-  PingdomApi.new.notify(params)
+	puts "LOGGING MESSAGE"
+  # SensuEventProcessor.new(params).process
 end
 
 get '/' do
