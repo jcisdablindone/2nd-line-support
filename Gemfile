@@ -10,7 +10,6 @@ gem 'redis'
 gem 'unicorn'
 gem 'excon'
 gem 'sinatra-partial'
-gem 'rack-contrib'
 
 group :development do
   gem 'foreman'
